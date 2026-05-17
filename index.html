@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fishing Boat Adventure</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a1628; overflow: hidden; font-family: 'Georgia', serif; }
+  canvas { display: block; }
+
+  #hud {
+    position: fixed; top: 0; left: 0; right: 0;
+    padding: 20px 30px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    pointer-events: none; z-index: 10;
+  }
+  .hud-box {
+    background: rgba(0,20,50,0.7);
+    border: 1px solid rgba(100,180,255,0.3);
+    border-radius: 8px; padding: 10px 20px;
+    color: #a8d8ff; font-size: 13px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    backdrop-filter: blur(6px);
+  }
+  .hud-box strong { display: block; font-size: 26px; color: #fff; font-family: 'Georgia', serif; letter-spacing: 0; text-transform: none; line-height: 1.1; }
+  #timer-box strong { color: #ffdd88; }
+  #timer-box.urgent strong { color: #ff6655; animation: pulse 0.5s infinite alternate; }
+  @keyframes pulse { from { opacity: 1; } to { opacity: 0.5; } }
+  @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+  #controls {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    color: rgba(150,200,255,0.5); font-size: 12px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    pointer-events: none; z-index: 10;
+  }
+
+  #overlay {
+    position: fixed; inset: 0;
+    background: rgba(5,15,35,0.92);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 20; gap: 16px;
+  }
+  #overlay h1 { font-size: clamp(32px, 6vw, 64px); color: #fff; letter-spacing: -0.02em; text-align: center; }
+  #overlay h1 span { color: #4ab0ff; }
+  #overlay p { color: rgba(180,210,255,0.7); font-size: 16px; text-align: center; max-width: 400px; line-height: 1.6; }
+  #overlay .score-display { font-size: 48px; color: #ffdd88; font-family: 'Georgia', serif; }
+  #overlay .highscore { font-size: 14px; color: rgba(180,210,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  #preview-canvas {
+    width: min(340px, 80vw); height: min(220px, 35vh);
+    border-radius: 12px;
+    border: 1px solid rgba(100,180,255,0.2);
+    box-shadow: 0 0 40px rgba(30,100,200,0.3);
+  }
+
+  #start-btn {
+    margin-top: 8px; padding: 14px 48px;
+    background: #4ab0ff; color: #001830;
+    border: none; border-radius: 6px;
+    font-size: 16px; font-family: 'Georgia', serif;
+    cursor: pointer; letter-spacing: 0.05em;
+    transition: background 0.2s, transform 0.1s;
+  }
+  #start-btn:hover { background: #7dcfff; transform: scale(1.03); }
+  #start-btn:active { transform: scale(0.98); }
+
+  .collect-flash {
+    position: fixed; pointer-events: none; z-index: 15;
+    font-size: 22px; font-family: 'Georgia', serif;
+    color: #ffdd88; text-shadow: 0 0 10px rgba(255,200,80,0.8);
+    animation: floatUp 1s ease-out forwards;
+  }
+  @keyframes floatUp { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-60px); } }
+</style>
+</head>
+<body>
+
+<div id="hud">
+  <div class="hud-box" id="score-box">Punkte<strong id="score-val">0</strong></div>
+  <div class="hud-box" id="timer-box">Zeit<strong id="timer-val">2:00</strong></div>
+  <div class="hud-box">Gesammelt<strong id="collected-val">0</strong></div>
+  <div class="hud-box" id="lives-box">Leben<strong id="lives-val">❤️❤️❤️</strong></div>
+</div>
+
+<div id="controls">W A S D · Pfeiltasten zum Steuern</div>
+
+<div id="overlay">
+  <h1>Fishing Boat<br><span>Adventure</span></h1>
+  <canvas id="preview-canvas"></canvas>
+  <p id="overlay-sub">Sammle Fische &amp; Bojen · Meide Minen · 3 Leben</p>
+  <div class="score-display" id="final-score" style="display:none"></div>
+  <div class="highscore" id="highscore-display" style="display:none"></div>
+  <button id="start-btn">Spiel starten</button>
+</div>
+
+<script type="module" src="./js/game.js"></script>
+</body>
+</html>
